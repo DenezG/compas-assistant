@@ -64,6 +64,7 @@ const Chat = ({
   const [messages, setMessages] = useState([]);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [threadId, setThreadId] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   // automitcally scroll to bottom of chat
   const messagesEndRef = useRef(null);
@@ -178,6 +179,22 @@ const Chat = ({
     setInputDisabled(false);
   };
 
+  const handleImageFileDone = async (content: any, snapshot: any) => {
+    console.log("handleImageFileDone", content, snapshot);
+    const response = await fetch(`/api/assistants/image/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fileId: content.file_id,
+      }),
+    }).then((res) => res.blob());
+    console.log("response handleImageFileDone", response);
+    const url = URL.createObjectURL(response);
+    setImageUrl(url);
+  };
+
   const handleReadableStream = (stream: AssistantStream) => {
     // messages
     stream.on("textCreated", handleTextCreated);
@@ -186,6 +203,9 @@ const Chat = ({
     // code interpreter
     stream.on("toolCallCreated", toolCallCreated);
     stream.on("toolCallDelta", toolCallDelta);
+
+    // image file
+    stream.on("imageFileDone", handleImageFileDone);
 
     // events without helpers yet (e.g. requires_action and run.done)
     stream.on("event", (event) => {
@@ -222,6 +242,7 @@ const Chat = ({
         {messages.map((msg, index) => (
           <Message key={index} role={msg.role} text={msg.text} />
         ))}
+        {imageUrl && <img src={imageUrl} alt="assistant image" />}
         <div ref={messagesEndRef} />
       </div>
       <form
