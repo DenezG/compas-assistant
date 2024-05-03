@@ -9,7 +9,7 @@ import FileViewer from "../../components/file-viewer";
 
 const FunctionCalling = () => {
   const [weatherData, setWeatherData] = useState({});
-
+  const [imageUrl, setImageUrl] = useState('');
   const functionCallHandler = async (call) => {
     if (call?.function?.name !== "get_weather") return;
     const args = JSON.parse(call.function.arguments);
@@ -42,12 +42,11 @@ const FunctionCalling = () => {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.column}>
-          <WeatherWidget {...weatherData} />
-          <FileViewer />
+        {imageUrl && <img src={imageUrl} alt="assistant image" />}          <FileViewer />
         </div>
         <div className={styles.chatContainer}>
           <div className={styles.chat}>
-            <Chat functionCallHandler={functionCallHandler} />
+            <Chat functionCallHandler={functionCallHandler} imageUrl={imageUrl} setImageUrl={setImageUrl}/>
           </div>
         </div>
       </div>

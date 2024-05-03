@@ -55,16 +55,17 @@ type ChatProps = {
   functionCallHandler?: (
     toolCall: RequiredActionFunctionToolCall
   ) => Promise<string>;
+  imageUrl : any
+  setImageUrl : any
 };
 
 const Chat = ({
-  functionCallHandler = () => Promise.resolve(""), // default to return empty string
+  functionCallHandler = () => Promise.resolve(""), imageUrl,setImageUrl,// default to return empty string
 }: ChatProps) => {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [threadId, setThreadId] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
   // automitcally scroll to bottom of chat
   const messagesEndRef = useRef(null);
@@ -242,7 +243,6 @@ const Chat = ({
         {messages.map((msg, index) => (
           <Message key={index} role={msg.role} text={msg.text} />
         ))}
-        {imageUrl && <img src={imageUrl} alt="assistant image" />}
         <div ref={messagesEndRef} />
       </div>
       <form
