@@ -225,7 +225,7 @@ const Chat = ({
               <Question setUserInput={setUserInput} statusOff={inputDisabled} 
               question = "Quelles sont les spécificités de la ville de Montpellier ?"/>
               <Question setUserInput={setUserInput} statusOff={inputDisabled} 
-              question = "Quel est le taux de chômage en 2021 en France ?"/>
+              question = "Peux tu faire le graphique de la pyramide des âges à Montpellier?"/>
       </div>
       <FormChat handleSubmit={handleSubmit} userInput={userInput} setUserInput={setUserInput} inputDisabled={inputDisabled}/>
     </div>

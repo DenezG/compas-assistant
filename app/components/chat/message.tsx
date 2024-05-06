@@ -1,4 +1,4 @@
-import styles from "./messages.module.css"
+import styles from "./message.module.css"
 import logo_compas from "../../../datas/logo_compas.png"
 import logo_user from "../../../datas/user.svg"
 import Image from "next/image";

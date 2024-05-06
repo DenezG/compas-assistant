@@ -23,7 +23,7 @@
 
 .loaderIcon{
   align-self: flex-start;
-  background-color: rgba(0, 128, 255, 0.3); /* Bleu clair transparent */
+  background-color: rgba(0, 128, 255, 0.5); /* Bleu clair transparent */
   border-radius: 50%; /* Arrondi */
   border-radius: 50%; /* Arrondi */
   padding: 8px; /* Espace autour de l'icône */
