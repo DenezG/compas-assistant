@@ -2,11 +2,11 @@
 
 import React from "react";
 import styles from "./page.module.css";
+import Background from "./background";
 
 const Home = () => {
   const categories = {
     "Basic chat": "basic-chat",
-    "Function calling": "function-calling",
     "File search": "file-search",
     All: "all",
   };

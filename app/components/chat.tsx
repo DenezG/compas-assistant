@@ -3,64 +3,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./chat.module.css";
 import { AssistantStream } from "openai/lib/AssistantStream";
-import Markdown from "react-markdown";
 // @ts-expect-error - no types for this yet
 import { AssistantStreamEvent } from "openai/resources/beta/assistants/assistants";
 import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/runs/runs";
+import Message from "./chat/message";
 
-type MessageProps = {
-  role: "user" | "assistant" | "code";
-  text: string;
-};
 
-const UserMessage = ({ text }: { text: string }) => {
-  return <div className={styles.userMessage}>{text}</div>;
-};
 
-const AssistantMessage = ({ text }: { text: string }) => {
-  return (
-    <div className={styles.assistantMessage}>
-      <Markdown>{text}</Markdown>
-    </div>
-  );
-};
-
-const CodeMessage = ({ text }: { text: string }) => {
-  return (
-    <div className={styles.codeMessage}>
-      {text.split("\n").map((line, index) => (
-        <div key={index}>
-          <span>{`${index + 1}. `}</span>
-          {line}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const Message = ({ role, text }: MessageProps) => {
-  switch (role) {
-    case "user":
-      return <UserMessage text={text} />;
-    case "assistant":
-      return <AssistantMessage text={text} />;
-    case "code":
-      return <CodeMessage text={text} />;
-    default:
-      return null;
-  }
-};
 
 type ChatProps = {
   functionCallHandler?: (
     toolCall: RequiredActionFunctionToolCall
   ) => Promise<string>;
-  imageUrl : any
-  setImageUrl : any
+  setImageUrl ?: any
 };
 
 const Chat = ({
-  functionCallHandler = () => Promise.resolve(""), imageUrl,setImageUrl,// default to return empty string
+  functionCallHandler = () => Promise.resolve(""),setImageUrl,// default to return empty string
 }: ChatProps) => {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
@@ -254,14 +213,14 @@ const Chat = ({
           className={styles.input}
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Enter your question"
+          placeholder="Entrez votre question"
         />
         <button
           type="submit"
           className={styles.button}
           disabled={inputDisabled}
         >
-          Send
+          Envoyer
         </button>
       </form>
     </div>
