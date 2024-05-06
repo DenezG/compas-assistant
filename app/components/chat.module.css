@@ -1,45 +1,8 @@
 .chatContainer {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   height: 100%;
   width: 100%;
-}
-
-.inputForm {
-  display: flex;
-  width: 100%;
-  padding: 10px;
-  padding-bottom: 40px;
-  order: 1;
-}
-
-.input {
-  flex-grow: 1;
-  padding: 16px 24px;
-  margin-right: 10px;
-  border-radius: 60px;
-  border: 2px solid transparent;
-  font-size: 1em;
-  background-color: #d7d5d5;
-}
-
-.input:focus {
-  outline: none !important;
-  border-color: #000;
-  background-color: white;
-}
-
-.button {
-  padding: 8px 24px;
-  background-color: rgb(12 74 110);
-  color: white;
-  border: none;
-  font-size: 1em;
-  border-radius: 60px; /* Removed duplicate border-radius property */
-}
-
-.button:disabled {
-  background-color: lightgrey;
 }
 
 .messages {
@@ -48,6 +11,35 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  order: 2;
   white-space: pre-wrap;
+}
+
+
+.loaderContainer{
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column; 
+}
+
+.loaderIcon{
+  align-self: flex-start;
+  background-color: rgba(0, 128, 255, 0.3); /* Bleu clair transparent */
+  border-radius: 50%; /* Arrondi */
+  border-radius: 50%; /* Arrondi */
+  padding: 8px; /* Espace autour de l'icône */
+  margin-bottom: 0px; /* Réduire l'espace entre le message et l'icône */
+}
+
+.loader{
+  width: auto; /* ajustez selon vos besoins */
+  height: 15px; /* assurez-vous que le logo conserve son aspect ratio */
+  margin-right: 0px; /* espace entre les logos */
+  border-radius: 5%;
+}
+
+.questionsContainer{
+  display: flex;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  justify-content: space-around;
 }

@@ -7,6 +7,10 @@ import { AssistantStream } from "openai/lib/AssistantStream";
 import { AssistantStreamEvent } from "openai/resources/beta/assistants/assistants";
 import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/runs/runs";
 import Message from "./chat/message";
+import Image from "next/image";
+import loader from "../../datas/loader.gif"
+import Question from "./chat/question";
+import FormChat from "./chat/formChat";
 
 
 
@@ -202,27 +206,28 @@ const Chat = ({
         {messages.map((msg, index) => (
           <Message key={index} role={msg.role} text={msg.text} />
         ))}
+        {/*Affiche un loader lorsque l'assistant est en train d'écrire/chercher des données*/}
+        {inputDisabled && <div  className={styles.loaderContainer}>
+                        <div className={styles.loaderIcon}>
+                            <Image src={loader} alt="Load Logo" className={styles.loader}/>
+                        </div>
+                    </div>
+        }
         <div ref={messagesEndRef} />
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className={`${styles.inputForm} ${styles.clearfix}`}
-      >
-        <input
-          type="text"
-          className={styles.input}
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Entrez votre question"
-        />
-        <button
-          type="submit"
-          className={styles.button}
-          disabled={inputDisabled}
-        >
-          Envoyer
-        </button>
-      </form>
+       {/* Questions proposées
+              * Pour ajouter une question suivre le schéma
+              * <Question setInput={props.setInput} status={props.status}
+              * question = "Votre question"
+              * Le css est à revoir pour plus de 2 questions
+        */}
+      <div className={styles.questionContainer}>
+              <Question setUserInput={setUserInput} statusOff={inputDisabled} 
+              question = "Quelles sont les spécificités de la ville de Montpellier ?"/>
+              <Question setUserInput={setUserInput} statusOff={inputDisabled} 
+              question = "Quel est le taux de chômage en 2021 en France ?"/>
+      </div>
+      <FormChat handleSubmit={handleSubmit} userInput={userInput} setUserInput={setUserInput} inputDisabled={inputDisabled}/>
     </div>
   );
 };
