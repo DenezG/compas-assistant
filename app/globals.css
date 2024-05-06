@@ -62,13 +62,6 @@ a {
   right: 50px; /* Ajustement de la position horizontale pour le deuxième logo */
 }
 
-
-@media (max-width: 1100px) {
-  .logo {
-    display: none;
-  }
-}
-
 ul,
 ol {
   padding-left: 20px;
