@@ -12,11 +12,11 @@ const FileSearchPage = () => {
         <div className={styles.column}>
           <FileViewer />
         </div>
-        <div className={styles.chatContainer}>
+        {/**<div className={styles.chatContainer}>
           <div className={styles.chat}>
             <Chat />
           </div>
-        </div>
+        </div>*/}
       </div>
     </main>
   );

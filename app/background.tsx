@@ -16,5 +16,6 @@ export default function Background() {
                 zIndex: -5
             }}
         />
+        
     );
 }

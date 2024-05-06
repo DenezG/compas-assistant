@@ -44,14 +44,16 @@ a {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  position: absolute;
+  top: 16px;
+  right: 0px;
 }
 
 .logo {
   width: auto;
   height: 32px;
-  margin-right: 50px; /* espace entre les logos */
-  position: absolute;
-  top: 16px;
+  margin-right: 30px; /* espace entre les logos */
+  
 }
 
 .logo:nth-child(2) {
@@ -59,6 +61,7 @@ a {
   height: 35px;
   right: 50px; /* Ajustement de la position horizontale pour le deuxième logo */
 }
+
 
 @media (max-width: 1100px) {
   .logo {
