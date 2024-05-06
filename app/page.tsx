@@ -2,19 +2,19 @@
 
 import React from "react";
 import styles from "./page.module.css";
+import Background from "./background";
 
 const Home = () => {
   const categories = {
-    "Basic chat": "basic-chat",
-    "Function calling": "function-calling",
+    "Chat simple": "basic-chat",
     "File search": "file-search",
-    All: "all",
+    "Chat avec Images": "all",
   };
 
   return (
     <main className={styles.main}>
       <div className={styles.title}>
-        Explore sample apps built with Assistants API
+        Chatbot du compas utilisant l'API d'OpenAI
       </div>
       <div className={styles.container}>
         {Object.entries(categories).map(([name, url]) => (

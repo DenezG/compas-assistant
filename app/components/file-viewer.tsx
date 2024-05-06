@@ -62,7 +62,7 @@ const FileViewer = () => {
         }`}
       >
         {files.length === 0 ? (
-          <div className={styles.title}>Attach files to test file search</div>
+          <div className={styles.title}>Joindre des fichiers</div>
         ) : (
           files.map((file) => (
             <div key={file.file_id} className={styles.fileEntry}>
@@ -79,7 +79,7 @@ const FileViewer = () => {
       </div>
       <div className={styles.fileUploadContainer}>
         <label htmlFor="file-upload" className={styles.fileUploadBtn}>
-          Attach files
+          Joindre un fichier
         </label>
         <input
           type="file"

@@ -3,62 +3,27 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./chat.module.css";
 import { AssistantStream } from "openai/lib/AssistantStream";
-import Markdown from "react-markdown";
 // @ts-expect-error - no types for this yet
 import { AssistantStreamEvent } from "openai/resources/beta/assistants/assistants";
 import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/runs/runs";
+import Message from "./chat/message";
+import Image from "next/image";
+import loader from "../../datas/loader.gif"
+import Question from "./chat/question";
+import FormChat from "./chat/formChat";
 
-type MessageProps = {
-  role: "user" | "assistant" | "code";
-  text: string;
-};
 
-const UserMessage = ({ text }: { text: string }) => {
-  return <div className={styles.userMessage}>{text}</div>;
-};
 
-const AssistantMessage = ({ text }: { text: string }) => {
-  return (
-    <div className={styles.assistantMessage}>
-      <Markdown>{text}</Markdown>
-    </div>
-  );
-};
-
-const CodeMessage = ({ text }: { text: string }) => {
-  return (
-    <div className={styles.codeMessage}>
-      {text.split("\n").map((line, index) => (
-        <div key={index}>
-          <span>{`${index + 1}. `}</span>
-          {line}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const Message = ({ role, text }: MessageProps) => {
-  switch (role) {
-    case "user":
-      return <UserMessage text={text} />;
-    case "assistant":
-      return <AssistantMessage text={text} />;
-    case "code":
-      return <CodeMessage text={text} />;
-    default:
-      return null;
-  }
-};
 
 type ChatProps = {
   functionCallHandler?: (
     toolCall: RequiredActionFunctionToolCall
   ) => Promise<string>;
+  setImageUrl ?: any
 };
 
 const Chat = ({
-  functionCallHandler = () => Promise.resolve(""), // default to return empty string
+  functionCallHandler = () => Promise.resolve(""),setImageUrl,// default to return empty string
 }: ChatProps) => {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
@@ -178,6 +143,22 @@ const Chat = ({
     setInputDisabled(false);
   };
 
+  const handleImageFileDone = async (content: any, snapshot: any) => {
+    console.log("handleImageFileDone", content, snapshot);
+    const response = await fetch(`/api/assistants/image/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fileId: content.file_id,
+      }),
+    }).then((res) => res.blob());
+    console.log("response handleImageFileDone", response);
+    const url = URL.createObjectURL(response);
+    setImageUrl(url);
+  };
+
   const handleReadableStream = (stream: AssistantStream) => {
     // messages
     stream.on("textCreated", handleTextCreated);
@@ -186,6 +167,9 @@ const Chat = ({
     // code interpreter
     stream.on("toolCallCreated", toolCallCreated);
     stream.on("toolCallDelta", toolCallDelta);
+
+    // image file
+    stream.on("imageFileDone", handleImageFileDone);
 
     // events without helpers yet (e.g. requires_action and run.done)
     stream.on("event", (event) => {
@@ -222,27 +206,28 @@ const Chat = ({
         {messages.map((msg, index) => (
           <Message key={index} role={msg.role} text={msg.text} />
         ))}
+        {/*Affiche un loader lorsque l'assistant est en train d'écrire/chercher des données*/}
+        {inputDisabled && <div  className={styles.loaderContainer}>
+                        <div className={styles.loaderIcon}>
+                            <Image src={loader} alt="Load Logo" className={styles.loader}/>
+                        </div>
+                    </div>
+        }
         <div ref={messagesEndRef} />
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className={`${styles.inputForm} ${styles.clearfix}`}
-      >
-        <input
-          type="text"
-          className={styles.input}
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Enter your question"
-        />
-        <button
-          type="submit"
-          className={styles.button}
-          disabled={inputDisabled}
-        >
-          Send
-        </button>
-      </form>
+       {/* Questions proposées
+              * Pour ajouter une question suivre le schéma
+              * <Question setInput={props.setInput} status={props.status}
+              * question = "Votre question"
+              * Le css est à revoir pour plus de 2 questions
+        */}
+      <div className={styles.questionContainer}>
+              <Question setUserInput={setUserInput} statusOff={inputDisabled} 
+              question = "Quelles sont les spécificités de la ville de Montpellier ?"/>
+              <Question setUserInput={setUserInput} statusOff={inputDisabled} 
+              question = "Peux tu faire le graphique de la pyramide des âges à Montpellier?"/>
+      </div>
+      <FormChat handleSubmit={handleSubmit} userInput={userInput} setUserInput={setUserInput} inputDisabled={inputDisabled}/>
     </div>
   );
 };
