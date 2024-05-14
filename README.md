@@ -1,24 +1,26 @@
-# OpenAI Assistants API Quickstart
-A quick-start template using the OpenAI [Assistants API](https://platform.openai.com/docs/assistants/overview) with [Next.js](https://nextjs.org/docs).
+# Compas Assistant
+Template using the OpenAI [Assistants API](https://platform.openai.com/docs/assistants/overview) with [Next.js](https://nextjs.org/docs).
 <br/>
 <br/>
 ![OpenAI Assistants API Quickstart](https://github.com/openai/openai-assistants-quickstart/assets/27232/755e85e9-3ea4-421f-b202-3b0c435ea270)
-
 
 
 ## Quickstart Setup
 
 ### 1. Clone repo
 ```shell
-git clone https://github.com/openai/openai-assistants-quickstart.git
-cd openai-assistants-quickstart
+git clone https://github.com/DenezG/compas-assistant.git
+cd compas-assistant
 ```
 
 ### 2. Set your [OpenAI API key](https://platform.openai.com/api-keys)
 ```shell
-export OPENAI_API_KEY="sk_..."
+OPENAI_API_KEY = 'sk-proj-...'
+ASSISTANT_ID = 'asst_...'
+DEWY_ENDPOINT= 'http://localhost:8000'
+DEWY_COLLECTION= 'main'
 ```
-(or in `.env.example` and rename it to `.env`).
+(inside a `.env.local` that you have to create).
 
 ### 3. Install dependencies
 ```shell
@@ -34,16 +36,9 @@ npm run dev
 
 ## Overview
 
-This project is intended to serve as a template for using the Assistants API in Next.js with [streaming](https://platform.openai.com/docs/assistants/overview/step-4-create-a-run), tool use ([code interpreter](https://platform.openai.com/docs/assistants/tools/code-interpreter) and [file search](https://platform.openai.com/docs/assistants/tools/file-search)), and [function calling](https://platform.openai.com/docs/assistants/tools/function-calling). While there are multiple pages to demonstrate each of these capabilities, they all use the same underlying assistant with all capabilities enabled.
+This project represent an assistant that uses the compas datas in order to respond at the user's questions.
+We advice to use 'Chat avec Images' since it's the most advanced and regroup the two other pages.
 
-The main logic for chat will be found in the `Chat` component in `app/components/chat.tsx`, and the handlers starting with `api/assistants/threads` (found in `api/assistants/threads/...`). Feel free to start your own project and copy some of this logic in! The `Chat` component itself can be copied and used directly, provided you copy the styling from `app/components/chat.module.css` as well.
-
-### Pages
-
-- Basic Chat Example: [http://localhost:3000/examples/basic-chat](http://localhost:3000/examples/basic-chat)
-- Function Calling Example: [http://localhost:3000/examples/function-calling](http://localhost:3000/examples/function-calling)
-- File Search Example: [http://localhost:3000/examples/file-search](http://localhost:3000/examples/file-search)
-- Full-featured Example: [http://localhost:3000/examples/all](http://localhost:3000/examples/all)
 
 ### Main Components
 
@@ -57,8 +52,7 @@ The main logic for chat will be found in the `Chat` component in `app/components
 - `api/assistants/threads/[threadId]/messages` - `POST`: send message to assistant
 - `api/assistants/threads/[threadId]/actions` - `POST`: inform assistant of the result of a function it decided to call
 - `api/assistants/files` - `GET`/`POST`/`DELETE`: fetch, upload, and delete assistant files for file search
+- `api/assistants/image` - `POST` : fetch an image by using the fileId of the image
 
-## Feedback
 
-Let us know if you have any thoughts, questions, or feedback in [this form](https://docs.google.com/forms/d/e/1FAIpQLScn_RSBryMXCZjCyWV4_ebctksVvQYWkrq90iN21l1HLv3kPg/viewform?usp=sf_link)!
 
