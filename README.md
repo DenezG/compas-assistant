@@ -55,7 +55,7 @@ Nous vous conseillons d'utiliser la page 'Chat avec Images' car c'est la plus av
 
 
 # Dewy RAG Setup
-
+A savoir que pour Dewy suite à des erreurs nous ne pouvons utiliser qu'une seule collection mais cela reste fonctionnel.
 
 ## Installation de PostgreSQL
 
@@ -111,57 +111,37 @@ Assurez-vous d'ouvrir un nouveau terminal avant de passer à l'étape suivante.
 
 Pour installer et exécuter le front-end avec Next.js, suivez ces étapes :
 
-1. Créez votre fichier env :    
+
+1. Accédez au répertoire `compas-assistant` :
     ```bash
-    OPENAI_API_KEY=<your_openai_api_key_here>
-    DEWY_ENDPOINT=localhost:8000
-    DEWY_COLLECTION=main
+    cd compas-assistant
     ```
-2. Accédez au répertoire `my-rag-app` :
-    ```bash
-    cd my-rag-app
     ```
-3. Si les bibliothèques ne sont pas déjà présentes dans le dépôt, installez-les en exécutant :
-    ```bash
-    npm install openai dewy-ts ai
-    ```
-4. Enfin, lancez l'application en mode développement :
+2. Lancez l'application en mode développement :
     ```bash
     npm run dev
     ```
-
-C'est tout ! Votre environnement pour "my-rag" est maintenant prêt à être utilisé.
 
 Maintenant il est probable que dewy ai quelques erreurs.
 
 ## dewy errors
 
-#### Backend Python (collections/documents/router.py) Error : Method not allowed 
-- Modifier les routes de `@post` en `@put` pour les dossiers `collections` et `documents`. Cela résout un problème avec react-admin qui n'utilise pas de post pour sa fonction create.
+#### Backend Python (collections/documents/router.py) Error : Method not allowed pour ajouter doc/col 
+- Modifier les routes de `@post` en `@put` pour les dossiers `collections`: 1 fois et `documents`: 2 fois. Cela résout un problème avec react-admin qui n'utilise pas de post pour sa fonction create.
   
 #### Backend Python (document/models.py - AddDocumentRequest) Error : Unprocessable Entity
-- Ajouter `'= 'main'` à la variable `collection` pour que la requête reçoive correctement l'identifiant de la collection ici 'main', avec cette résolution on ne peut que stocker des documents sur la collection 'main'.
+- Ajouter `= 'main'` à la variable `collection` pour que la requête reçoive correctement l'identifiant de la collection ici 'main', avec cette résolution on ne peut que stocker des documents sur la collection 'main'.
 - TODO : Trouver pourquoi l'identifiant de la collection n'est pas communiquer lors de sa selection.
 
-#### Backend Python (document/models.py - TextResult) Error : les chunks ne s'affichent pas
-- Ajouter `'= 'main'` à la variable `collection` pour que la requête reçoive correctement l'identifiant de la collection, problème identique à celui d'avant
+#### Backend Python (chunk/models.py - RetrieveRequest) Error : les chunks ne s'affichent pas
+- Ajouter `= 'main'` à la variable `collection` pour que la requête reçoive correctement l'identifiant de la collection, problème identique à celui d'avant
 - Cette manipulation permet de rendre les chunks de documents recherchables.
 - TODO : Trouver pourquoi l'identifiant de la collection n'est pas communiquer lors de sa selection.
 
-#### Backend JavaScript (app/api/chat) Error : POST 500
-- Mettre à jour les fichiers depuis [https://github.com/DewyKB/dewy-ts/tree/main/examples/nextjs_and_openai_chatbot/app/api/chat](https://github.com/DewyKB/dewy-ts/tree/main/examples/nextjs_and_openai_chatbot/app/api/chat).
-
-#### Configuration de l'application (.env.local)
-```env
-OPENAI_API_KEY = 'sk-proj-B5UxsGbpYtPUQZFgcIJcT3BlbkFJNN8xcZ5wX1huxZp0xF9M'
-ASSISTANT_ID = 'asst_lj9VxT8aGfaoNpZv922ndRfg'
-DEWY_ENDPOINT= 'http://localhost:8000'
-DEWY_COLLECTION= 'main'
-```
 
 #### Backend Python (common/collection_embeddings.py) : tri des chunks de documents par score
   - Ajouter `DESC` après `ORDER BY` à la ligne 66.
   - Ajouter `DESC` après `ORDER BY` à la ligne 77.
   - Après la ligne 86, ajouter `ORDER BY relevant_embeddings.score DESC`.
 
-Le problème est désormais résolu et dewy fonctionne parfaitement.
+Le problème est désormais résolu, relancer dewy et votre appli next. Dewy fonctionne parfaitement.
