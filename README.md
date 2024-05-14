@@ -93,9 +93,9 @@ Pour installer Dewy et configurer l'environnement, suivez ces étapes :
     ```bash
     pip install dewy
     ```
-7. Assurez-vous d'avoir crée et rempli le fichier `.env` dans le virtualenv:
+7. Créez et remplissez un fichier `.env` dans le virtualenv (dossier actuel):
    ```env
-   ENVIRONMENT=LOCAL
+    ENVIRONMENT=LOCAL
     DB=postgresql://postgres:admin@localhost:5432/postgres
     OPENAI_API_KEY='your-api-key'
    ```
