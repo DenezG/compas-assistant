@@ -22,9 +22,9 @@ const Warnings = () => {
     <>
       {!assistantId && (
         <div className={styles.container}>
-          <h1>Start by creating your assistant</h1>
+          <h1>Commencer en créant votre assistant</h1>
           <div className={styles.message}>
-            Create an assistant and set its ID in{" "}
+            Créer votre assistant et insérer le dans{" "}
             <span>app/assistant-config.ts</span>
           </div>
           {!newAssistantId ? (
