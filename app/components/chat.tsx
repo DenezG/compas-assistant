@@ -236,7 +236,7 @@ const Chat = ({
             <Question setUserInput={setUserInput} statusOff={inputDisabled} handleSubmit={handleSubmit}
               question = "Bonjour, pouvez-vous m'aider à parcourir les documents téléchargés?"/>
             <Question setUserInput={setUserInput} statusOff={inputDisabled} handleSubmit={handleSubmit}
-              question = "Bonjour!"/>
+              question = "Pouvez-vous me faire un graphique de l'évolution de la population de mon territoire?"/>
           </form>
       }
               
