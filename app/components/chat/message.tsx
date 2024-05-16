@@ -19,6 +19,7 @@ const UserMessage = ({ text }: { text: string }) => {
 };
 
 const AssistantMessage = ({ text }: { text: string }) => {
+  console.log('message: ' + text)
   return (
     <div className={styles.assistantContainer}>
       <div className={styles.assistantIcon}>

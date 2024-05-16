@@ -6,7 +6,7 @@ export async function POST(request) {
 
   const { fileId } = await request.json();
 
-  //console.log("fileId", fileId);
+  console.log("fileId", fileId);
 
   const response = await openai.files.content(fileId);
 
