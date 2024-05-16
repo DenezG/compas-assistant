@@ -200,11 +200,13 @@ const Chat = ({
     setMessages((prevMessages) => [...prevMessages, { role, text }]);
   };
 
+  /**NextQuestions */
+  const [nextQuestions,setNextQuestions] = useState<string[]>([]);;
   return (
     <div className={styles.chatContainer}>
       <div className={styles.messages}>
         {messages.map((msg, index) => (
-          <Message key={index} role={msg.role} text={msg.text} />
+          <Message key={index} role={msg.role} text={msg.text} setNextQuestions={setNextQuestions} nextQuestions={nextQuestions}/>
         ))}
         {/*Affiche un loader lorsque l'assistant est en train d'écrire/chercher des données*/}
         {inputDisabled && <div  className={styles.loaderContainer}>
@@ -221,12 +223,23 @@ const Chat = ({
               * question = "Votre question"
               * Le css est à revoir pour plus de 2 questions
         */}
-      <div className={styles.questionContainer}>
-              <Question setUserInput={setUserInput} statusOff={inputDisabled} 
-              question = "Quelles sont les spécificités de la ville de Montpellier ?"/>
-              <Question setUserInput={setUserInput} statusOff={inputDisabled} 
-              question = "Peux tu faire le graphique de la pyramide des âges à Montpellier?"/>
-      </div>
+      {
+        nextQuestions.length>1 ?
+          <form onSubmit={handleSubmit} className={styles.questionContainer}> 
+            {nextQuestions.map((question) => (
+              <Question setUserInput={setUserInput} statusOff={inputDisabled} handleSubmit={handleSubmit}
+                question = {question}/>
+              ))}
+          </form>
+          :
+          <form onSubmit={handleSubmit} className={styles.questionContainer}>  
+            <Question setUserInput={setUserInput} statusOff={inputDisabled} handleSubmit={handleSubmit}
+              question = "Bonjour, pouvez-vous m'aider à parcourir les documents téléchargés?"/>
+            <Question setUserInput={setUserInput} statusOff={inputDisabled} handleSubmit={handleSubmit}
+              question = "Bonjour!"/>
+          </form>
+      }
+              
       <FormChat handleSubmit={handleSubmit} userInput={userInput} setUserInput={setUserInput} inputDisabled={inputDisabled}/>
     </div>
   );

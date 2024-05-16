@@ -5,6 +5,7 @@
     margin-top: 0.5rem;
     margin-right: 1rem; /* Ajout de marge à droite pour créer de l'écart entre les questions */
     max-width: 250px;
+    width: 100%;
     color: white;
     cursor: pointer;
 }

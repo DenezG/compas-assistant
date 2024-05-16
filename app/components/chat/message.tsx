@@ -3,11 +3,23 @@ import logo_compas from "../../../datas/logo_compas.png"
 import logo_user from "../../../datas/user.svg"
 import Image from "next/image";
 import Markdown from "react-markdown";
+import JSONAutocomplete from 'json-autocomplete';
+import { useEffect } from "react";
+
+
 
 type MessageProps = {
   role: "user" | "assistant" | "code";
-  text: string;
+  text: string | any;
+  setNextQuestions:React.Dispatch<React.SetStateAction<string[]>>
+  nextQuestions : string[];
 };
+
+type AssistantProps = {
+  text : any;
+  setNextQuestions: any
+  nextQuestions : string[]
+}
 
 const UserMessage = ({ text }: { text: string }) => {
   return <div className={styles.userContainer}>
@@ -18,8 +30,7 @@ const UserMessage = ({ text }: { text: string }) => {
           </div> 
 };
 
-const AssistantMessage = ({ text }: { text: string }) => {
-  console.log('message: ' + text)
+const AnswerMessage = ({ text }: { text: string }) => {
   return (
     <div className={styles.assistantContainer}>
       <div className={styles.assistantIcon}>
@@ -30,6 +41,30 @@ const AssistantMessage = ({ text }: { text: string }) => {
       </div>
     </div>  
   );
+};
+
+const AssistantMessage = ({ text, setNextQuestions, nextQuestions }: AssistantProps) => {
+  console.log('brut: ' + text)
+  const jsonText = JSONAutocomplete(text);
+  if(jsonText){//cas non null
+    const arrayText = jsonText.replace('",]}', '",""]}').replace('\\"','\\n"').replace(':}',':""}').replace('{answer','{"answer"').replace('"possible}','","possible":""}').replace('",possible}','","possible":""}').replace('possibleNext}','"possibleNext":""}').replace('""possibleNext":""','","possibleNext":""').replace('possibleNextQuestions}','"possibleNextQuestions":""}').replace(',possibleNextQuestions :',',"possibleNextQuestions" :').replace(',possibleNextQuestions:',',"possibleNextQuestions" :');
+    console.log('arrayText: ' + arrayText )
+    if(arrayText){//cas non null
+      const parsedText = JSON.parse(arrayText);
+      /* Permet de ne pas boucler sur setNextQuestions */
+      useEffect(() => {
+        console.log('questions: ' + nextQuestions)
+        if (parsedText.possibleNextQuestions) {
+          setNextQuestions(parsedText.possibleNextQuestions);
+        }
+      }, [jsonText]);
+      return (<div>
+            {parsedText && <AnswerMessage text={parsedText.answer}/>}
+          </div>
+      );
+    }
+  }
+  return;
 };
 
 const CodeMessage = ({ text }: { text: string }) => {
@@ -45,12 +80,12 @@ const CodeMessage = ({ text }: { text: string }) => {
   );
 };
 
-export default function Message ({ role, text }: MessageProps) {
+export default function Message ({ role, text, setNextQuestions, nextQuestions }: MessageProps) {
   switch (role) {
     case "user":
       return <UserMessage text={text} />;
     case "assistant":
-      return <AssistantMessage text={text} />;
+      return <AssistantMessage text={text} setNextQuestions={setNextQuestions} nextQuestions={nextQuestions}/>;
     case "code":
       return <CodeMessage text={text} />;
     default:
