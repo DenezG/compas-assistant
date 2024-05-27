@@ -45,11 +45,11 @@ const AnswerMessage = ({ text }: { text: string }) => {
 
 const AssistantMessage = ({ text, setNextQuestions, nextQuestions }: AssistantProps) => {
   console.log('brut: ' + text)
-  const jsonText:string = JSONAutocomplete(text);
-  if(jsonText){//cas non null
-    const arrText:string = jsonText.replace('",]}', '",""]}').replace(/\\"/g, '\\n"').replace(/:\s*}/g, ':""}').replace('{answer','{"answer"').replace('"possible}','","possible":""}').replace('",possible}','","possible":""}').replace('possibleNext}','"possibleNext":""}').replace('""possibleNext":""','","possibleNext":""').replace('possibleNextQuestions}','"possibleNextQuestions":""}').replace(',possibleNextQuestions :',',"possibleNextQuestions" :').replace(',possibleNextQuestions:',',"possibleNextQuestions" :').replace('}undefined','}');
+  const jsonText = JSONAutocomplete(text);
+  if(jsonText && jsonText.startsWith("{")){//cas non null
+    const arrText:string = jsonText.replace('",]}', '",""]}').replace(/\\"/g, '\\n"').replace(/\\n"([\w.-]*)\\n"/g, '\\n\'$1\\n\'').replace(/:\s*}/g, ':""}').replace('{answer','{"answer"').replace('"possible}','","possible":""}').replace(',"possible"}',',"possible":""}').replace('",possible}','","possible":""}').replace('possibleNext}','"possibleNext":""}').replace('""possibleNext":""','","possibleNext":""').replace('possibleNextQuestions}','"possibleNextQuestions":""}').replace(',possibleNextQuestions :',',"possibleNextQuestions" :').replace(',possibleNextQuestions:',',"possibleNextQuestions" :').replace('}undefined','}');
     console.log('arrText: ' + arrText )
-    const arrayText:string = arrText.replace(/[_a-zA-Z0-9_.\s]+}/g, '}').replace(/:\s*}/g, ':""}')
+    const arrayText:string = arrText.replace(/[_a-zA-Z0-9_.,'\s]+}/g, '}').replace(/:\s*}/g, ':""}')
     console.log('arrayText: ' + arrayText )
     if(arrayText){//cas non null
       const parsedText = JSON.parse(arrayText);
@@ -66,8 +66,9 @@ const AssistantMessage = ({ text, setNextQuestions, nextQuestions }: AssistantPr
       );
     }
   }
-  return;
+  return <AnswerMessage text={text}/>;
 };
+
 
 const CodeMessage = ({ text }: { text: string }) => {
   return (
