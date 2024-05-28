@@ -7,11 +7,9 @@ import { AssistantStream } from "openai/lib/AssistantStream";
 import { AssistantStreamEvent } from "openai/resources/beta/assistants/assistants";
 import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/runs/runs";
 import Message from "./chat/message";
-import Image from "next/image";
-import loader from "../../datas/loader.gif"
 import Question from "./chat/question";
 import FormChat from "./chat/formChat";
-
+import Loader from "./chat/loader";
 
 
 
@@ -51,18 +49,27 @@ const Chat = ({
     createThread();
   }, []);
 
+  const controllerRef = useRef<AbortController>()
   const sendMessage = async (text) => {
-    const response = await fetch(
-      `/api/assistants/threads/${threadId}/messages`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          content: text,
-        }),
-      }
-    );
-    const stream = AssistantStream.fromReadableStream(response.body);
-    handleReadableStream(stream);
+    controllerRef.current = new AbortController();
+    const signal = controllerRef.current.signal;
+    try{
+      const response = await fetch(
+        `/api/assistants/threads/${threadId}/messages`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            content: text,
+          }),
+          signal
+        }
+      )
+      const stream = AssistantStream.fromReadableStream(response.body);
+      handleReadableStream(stream);
+    }catch(e){
+      console.log(e);
+    }
+    
   };
 
   const submitActionResult = async (runId, toolCallOutputs) => {
@@ -95,6 +102,16 @@ const Chat = ({
     setInputDisabled(true);
     scrollToBottom();
   };
+
+  //Handle Cancel
+  const handleCancel = (e) => {
+    e.preventDefault()
+    console.log('cancel fun')
+    if(controllerRef.current){
+      controllerRef.current.abort();
+      setInputDisabled(false);
+    }
+  }
 
   /* Stream Event Handlers */
 
@@ -210,10 +227,8 @@ const Chat = ({
         ))}
         {/*Affiche un loader lorsque l'assistant est en train d'écrire/chercher des données*/}
         {inputDisabled && <div  className={styles.loaderContainer}>
-                        <div className={styles.loaderIcon}>
-                            <Image src={loader} alt="Load Logo" className={styles.loader}/>
-                        </div>
-                    </div>
+                            <Loader/>
+                          </div>
         }
         <div ref={messagesEndRef} />
       </div>
@@ -238,10 +253,8 @@ const Chat = ({
             <Question setUserInput={setUserInput} statusOff={inputDisabled} handleSubmit={handleSubmit}
               question = "Pouvez-vous me faire un graphique de l'évolution de la population de mon territoire?"/>
           </form>
-      }
-              
-      <FormChat handleSubmit={handleSubmit} userInput={userInput} setUserInput={setUserInput} inputDisabled={inputDisabled}/>
-    </div>
+      }        
+      <FormChat handleSubmit={handleSubmit} userInput={userInput} setUserInput={setUserInput} inputDisabled={inputDisabled} handleCancel={handleCancel}/>    </div>
   );
 };
 
