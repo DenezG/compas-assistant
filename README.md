@@ -1,7 +1,5 @@
 # Compas Assistant
-Template using the OpenAI [Assistants API](https://platform.openai.com/docs/assistants/overview) with [Next.js](https://nextjs.org/docs).
-<br/>
-<br/>
+
 
 
 ## Quickstart Setup
