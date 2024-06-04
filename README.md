@@ -14,8 +14,6 @@ cd compas-assistant
 ```shell
 OPENAI_API_KEY = 'sk-proj-...'
 ASSISTANT_ID = 'asst_...'
-DEWY_ENDPOINT= 'http://localhost:8000'
-DEWY_COLLECTION= 'main'
 ```
 (inside a `.env.local` that you have to create).
 
